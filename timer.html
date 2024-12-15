@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>출석체크</title>
+    <link rel="stylesheet" href="timer.css">
+</head>
+<body>
+    <div class="align">
+    <div class="chulseok">
+        <h3>백석대학교</h3>
+        
+        <div class="date">날짜</div>
+        <div class="student">학생 개인정보</div>
+
+        <div class="period" id="p1">
+            <div class="subject">과목이름</div>
+            <div class="inform"><span>교수이름</span>|<span>강의실</span>|<span>교시</span></div>
+            <button class="attendanceN" id="p1">출석체크</button>
+            <button class="attendanceH" id="p1">인증출석체크</button>
+        </div>
+        <div class="period" id="p2">
+            <div class="subject">과목이름</div>
+            <div class="inform"><span>교수이름</span>|<span>강의실</span>|<span>교시</span></div>
+            <button class="attendanceN" id="p2">출석체크</button>
+            <button class="attendanceH" id="p2">인증출석체크</button>
+        </div>
+        <div class="period" id="p3">
+            <div class="subject">과목이름</div>
+            <div class="inform"><span>교수이름</span>|<span>강의실</span>|<span>교시</span></div>
+            <button class="attendanceN" id="p3">출석체크</button>
+            <button class="attendanceH" id="p3">인증출석체크</button>
+        </div>
+
+        <br>
+    </div>
+        
+
+    <div class="chulseok">
+        <h3>백석대학교 (선생님용)</h3>
+        <div class="date">날짜</div>
+        <div class="teacher">선생님 개인정보</div>
+    
+        <div class="period">
+            <div class="subject">과목이름</div>
+            <div class="inform"><span>강의실</span>|<span>교시</span></div>
+            <button class="attendance" id="p1-manage">출석관리</button>
+            <button class="attendanceCode" id="p1-generate">인증코드 생성</button>
+        </div>
+        <div class="period">
+            <div class="subject">과목이름</div>
+            <div class="inform"><span>강의실</span>|<span>교시</span></div>
+            <button class="attendance" id="p2-manage">출석관리</button>
+            <button class="attendanceCode" id="p2-generate">인증코드 생성</button>
+        </div>
+        <div class="period">
+            <div class="subject">과목이름</div>
+            <div class="inform"><span>강의실</span>|<span>교시</span></div>
+            <button class="attendance" id="p3-manage">출석관리</button>
+            <button class="attendanceCode" id="p3-generate">인증코드 생성</button>
+        </div>
+        <br>
+    </div>
+    </div>
+        
+        <div class="Bluetooth">
+            <div><button id="bluetooth">Bluetooth</button></div>
+        </div>
+            <p class = "Bluetooth" id="bluetoothStatus">Bluetooth 상태: Off</p>
+
+        <script>
+            const answer = []; // 인증번호 지정
+            const whichperiod = [];
+        
+            const periodsStatus = {
+                p1: { attendance: false, attendanceCode: false },
+                p2: { attendance: false, attendanceCode: false },
+                p3: { attendance: false, attendanceCode: false }
+            };
+
+            let bluetoothStatus = false;
+        
+            const startTimer1 = (event) => {
+                const period = event.target.id;
+                if (!periodsStatus[period].attendance) {
+                    alert('선생님이 출석관리를 시작하지 않았습니다. 나중에 다시 시도해주세요.');
+                    return;
+                }
+                alert('출석체크 버튼 클릭됨');
+                console.log(period);
+            };
+        
+            const startTimer2 = (event) => {
+                const period = event.target.id;
+                if (!periodsStatus[period].attendanceCode) {
+                    alert('선생님이 인증코드를 생성하지 않았습니다. 나중에 다시 시도해주세요.');
+                    return;
+                }
+        
+                const number = prompt('출석 인증코드를 입력하세요', '');
+                if (number === answer.join("")) {
+                    alert("출석 인증 성공!");
+                } else {
+                    alert("출석 인증 실패!");
+                }
+            };
+        
+            document.querySelectorAll(".attendanceN").forEach((button) => {
+                button.addEventListener("click", startTimer1);
+            });
+        
+            document.querySelectorAll(".attendanceH").forEach((button) => {
+                button.addEventListener("click", startTimer2);
+            });
+        
+            const manageAttendance = (event) => {
+                const period = event.target.id.split("-")[0];
+                periodsStatus[period].attendance = true;
+                alert(period + '출석 관리 기능 실행');
+            };
+        
+            const generateCode = (event) => {
+                const period = event.target.id.split("-")[0];
+        
+                const numbers = [];
+                for (let n = 1; n <= 9; n++) {
+                    numbers.push(n);
+                }
+        
+                for (let n = 0; n < 4; n++) { // 4자리 인증 코드 생성
+                    const index = Math.floor(Math.random() * numbers.length);
+                    answer.push(numbers[index]);
+                    numbers.splice(index, 1);
+                }
+                periodsStatus[period].attendanceCode = true; // 오타 수정
+                alert(period + ' 인증 코드 생성됨: ' + answer.join(''));
+            };
+        
+            document.querySelectorAll(".attendance").forEach((button) => {
+                button.addEventListener("click", manageAttendance);
+            });
+        
+            document.querySelectorAll(".attendanceCode").forEach((button) => {
+                button.addEventListener("click", generateCode);
+            });
+
+
+            const bluetoothButton = document.getElementById('bluetooth');
+            const changeStatus = document.getElementById('bluetoothStatus');
+
+            bluetoothButton.addEventListener('click', () => {
+                bluetoothStatus = !bluetoothStatus; // 상태를 반전시킴
+
+                if (bluetoothStatus) {
+                    changeStatus.textContent = 'Bluetooth 상태: On';
+                } else {
+                    changeStatus.textContent = 'Bluetooth 상태: Off';
+                }
+            });
+        </script>
+        
+</body>
+
+</html>
