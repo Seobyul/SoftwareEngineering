@@ -8,66 +8,64 @@
 </head>
 <body>
     <div class="align">
-    <div class="chulseok">
-        <h3>백석대학교</h3>
+        <div class="chulseok_student">
+            <h3>백석대학교</h3>
+            
+            <div class="date">2024년 12월 16일</div>
+            <div class="student">학생 개인정보</div>
+
+            <div class="period" id="p1">
+                <div class="subject">소프트웨어공학</div>
+                <div class="inform"><span>이승화</span>|<span>강의실: 본부 106</span>|<span>1교시</span></div>
+                <button class="attendanceN" id="p1">출석체크</button>
+                <button class="attendanceH" id="p1">인증출석체크</button>
+            </div>
+            <div class="period" id="p2">
+                <div class="subject">소프트웨어공학</div>
+                <div class="inform"><span>이승화</span>|<span>강의실: 본부 106</span>|<span>2교시</span></div>
+                <button class="attendanceN" id="p2">출석체크</button>
+                <button class="attendanceH" id="p2">인증출석체크</button>
+            </div>
+            <div class="period" id="p3">
+                <div class="subject">소프트웨어공학</div>
+                <div class="inform"><span>이승화</span>|<span>강의실: 본부 106</span>|<span>3교시</span></div>
+                <button class="attendanceN" id="p3">출석체크</button>
+                <button class="attendanceH" id="p3">인증출석체크</button>
+            </div>
+
+            <br>
+        </div>
+            
+
+        <div class="chulseok_teacher">
+            <h3>백석대학교 (선생님용)</h3>
+            <div class="date">2024년 12월 16일</div>
+            <div class="teacher">선생님 개인정보</div>
         
-        <div class="date">날짜</div>
-        <div class="student">학생 개인정보</div>
-
-        <div class="period" id="p1">
-            <div class="subject">과목이름</div>
-            <div class="inform"><span>교수이름</span>|<span>강의실</span>|<span>교시</span></div>
-            <button class="attendanceN" id="p1">출석체크</button>
-            <button class="attendanceH" id="p1">인증출석체크</button>
+            <div class="period" id="1">
+                <div class="subject">소프트웨어공학</div>
+                <div class="inform"><span>강의실: 본부 106</span>|<span>1교시</span></div>
+                <button class="attendance" id="p1-manage">출석관리</button>
+                <button class="attendanceCode" id="p1-generate">인증코드 생성</button>
+            </div>
+            <div class="period" id="2">
+                <div class="subject">소프트웨어공학</div>
+                <div class="inform"><span>강의실: 본부 106</span>|<span>2교시</span></div>
+                <button class="attendance" id="p2-manage">출석관리</button>
+                <button class="attendanceCode" id="p2-generate">인증코드 생성</button>
+            </div>
+            <div class="period" id="3">
+                <div class="subject">소프트웨어공학</div>
+                <div class="inform"><span>강의실: 본부 106</span>|<span>3교시</span></div>
+                <button class="attendance" id="p3-manage">출석관리</button>
+                <button class="attendanceCode" id="p3-generate">인증코드 생성</button>
+            </div>
+            <br>
         </div>
-        <div class="period" id="p2">
-            <div class="subject">과목이름</div>
-            <div class="inform"><span>교수이름</span>|<span>강의실</span>|<span>교시</span></div>
-            <button class="attendanceN" id="p2">출석체크</button>
-            <button class="attendanceH" id="p2">인증출석체크</button>
-        </div>
-        <div class="period" id="p3">
-            <div class="subject">과목이름</div>
-            <div class="inform"><span>교수이름</span>|<span>강의실</span>|<span>교시</span></div>
-            <button class="attendanceN" id="p3">출석체크</button>
-            <button class="attendanceH" id="p3">인증출석체크</button>
-        </div>
-
-        <br>
     </div>
         
-
-    <div class="chulseok">
-        <h3>백석대학교 (선생님용)</h3>
-        <div class="date">날짜</div>
-        <div class="teacher">선생님 개인정보</div>
-    
-        <div class="period">
-            <div class="subject">과목이름</div>
-            <div class="inform"><span>강의실</span>|<span>교시</span></div>
-            <button class="attendance" id="p1-manage">출석관리</button>
-            <button class="attendanceCode" id="p1-generate">인증코드 생성</button>
-        </div>
-        <div class="period">
-            <div class="subject">과목이름</div>
-            <div class="inform"><span>강의실</span>|<span>교시</span></div>
-            <button class="attendance" id="p2-manage">출석관리</button>
-            <button class="attendanceCode" id="p2-generate">인증코드 생성</button>
-        </div>
-        <div class="period">
-            <div class="subject">과목이름</div>
-            <div class="inform"><span>강의실</span>|<span>교시</span></div>
-            <button class="attendance" id="p3-manage">출석관리</button>
-            <button class="attendanceCode" id="p3-generate">인증코드 생성</button>
-        </div>
-        <br>
-    </div>
-    </div>
-        
-        <div class="Bluetooth">
-            <div><button id="bluetooth">Bluetooth</button></div>
-        </div>
-            <p class = "Bluetooth" id="bluetoothStatus">Bluetooth 상태: Off</p>
+        <p class="Bluetooth"><button id="bluetooth">Bluetooth</button></p>
+        <p class = "Bluetooth" id="bluetoothStatus">Bluetooth 상태: Off</p>
 
         <script>
             const answer = []; // 인증번호 지정
@@ -83,26 +81,34 @@
         
             const startTimer1 = (event) => {
                 const period = event.target.id;
-                if (!periodsStatus[period].attendance) {
-                    alert('선생님이 출석관리를 시작하지 않았습니다. 나중에 다시 시도해주세요.');
-                    return;
+                if(bluetoothStatus){
+                    if (!periodsStatus[period].attendance) {
+                        alert('선생님이 출석관리를 시작하지 않았습니다. 나중에 다시 시도해주세요.');
+                        return;
+                    }
+                    alert('출석체크 버튼 클릭됨');
+                } else {
+                    alert('Bluetooth가 활성화되지 않았습니다.')
                 }
-                alert('출석체크 버튼 클릭됨');
-                console.log(period);
             };
         
             const startTimer2 = (event) => {
                 const period = event.target.id;
-                if (!periodsStatus[period].attendanceCode) {
-                    alert('선생님이 인증코드를 생성하지 않았습니다. 나중에 다시 시도해주세요.');
-                    return;
-                }
-        
-                const number = prompt('출석 인증코드를 입력하세요', '');
-                if (number === answer.join("")) {
-                    alert("출석 인증 성공!");
+
+                if(bluetoothStatus){
+                    if (!periodsStatus[period].attendanceCode) {
+                        alert('선생님이 인증코드를 생성하지 않았습니다. 나중에 다시 시도해주세요.');
+                        return;
+                    }
+            
+                    const number = prompt('출석 인증코드를 입력하세요', '');
+                    if (number === answer.join("")) {
+                        alert("출석 인증 성공!");
+                    } else {
+                        alert("출석 인증 실패!");
+                    }
                 } else {
-                    alert("출석 인증 실패!");
+                    alert('Bluetooth가 활성화되지 않았습니다.')
                 }
             };
         
@@ -121,6 +127,7 @@
             };
         
             const generateCode = (event) => {
+                answer.length = 0;
                 const period = event.target.id.split("-")[0];
         
                 const numbers = [];
