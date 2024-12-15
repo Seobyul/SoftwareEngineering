@@ -47,18 +47,21 @@
                 <div class="inform"><span>강의실: 본부 106</span>|<span>1교시</span></div>
                 <button class="attendance" id="p1-manage">출석관리</button>
                 <button class="attendanceCode" id="p1-generate">인증코드 생성</button>
+                <button class="attendanceEnd" id="p1-end">출석 종료</button>
             </div>
             <div class="period" id="2">
                 <div class="subject">소프트웨어공학</div>
                 <div class="inform"><span>강의실: 본부 106</span>|<span>2교시</span></div>
                 <button class="attendance" id="p2-manage">출석관리</button>
                 <button class="attendanceCode" id="p2-generate">인증코드 생성</button>
+                <button class="attendanceEnd" id="p2-end">출석 종료</button>
             </div>
             <div class="period" id="3">
                 <div class="subject">소프트웨어공학</div>
                 <div class="inform"><span>강의실: 본부 106</span>|<span>3교시</span></div>
                 <button class="attendance" id="p3-manage">출석관리</button>
                 <button class="attendanceCode" id="p3-generate">인증코드 생성</button>
+                <button class="attendanceEnd" id="p3-end">출석 종료</button>
             </div>
             <br>
         </div>
@@ -68,13 +71,13 @@
         <p class = "Bluetooth" id="bluetoothStatus">Bluetooth 상태: Off</p>
 
         <script>
-            const answer = []; // 인증번호 지정
+            const answer = [];
             const whichperiod = [];
         
             const periodsStatus = {
-                p1: { attendance: false, attendanceCode: false },
-                p2: { attendance: false, attendanceCode: false },
-                p3: { attendance: false, attendanceCode: false }
+                p1: { attendance: false, attendanceCode: false, startTime: null, endTime: null  },
+                p2: { attendance: false, attendanceCode: false, startTime: null, endTime: null  },
+                p3: { attendance: false, attendanceCode: false, startTime: null, endTime: null  }
             };
 
             let bluetoothStatus = false;
@@ -83,10 +86,13 @@
                 const period = event.target.id;
                 if(bluetoothStatus){
                     if (!periodsStatus[period].attendance) {
-                        alert('선생님이 출석관리를 시작하지 않았습니다. 나중에 다시 시도해주세요.');
+                        alert('교수님이 출석관리를 시작하지 않았습니다. 나중에 다시 시도해주세요.');
                         return;
                     }
                     alert('출석체크 버튼 클릭됨');
+                    if (!periodsStatus[period].startTime) {
+                        periodsStatus[period].startTime = new Date();
+                    }
                 } else {
                     alert('Bluetooth가 활성화되지 않았습니다.')
                 }
@@ -97,13 +103,16 @@
 
                 if(bluetoothStatus){
                     if (!periodsStatus[period].attendanceCode) {
-                        alert('선생님이 인증코드를 생성하지 않았습니다. 나중에 다시 시도해주세요.');
+                        alert('교수님이 인증코드를 생성하지 않았습니다. 나중에 다시 시도해주세요.');
                         return;
                     }
             
                     const number = prompt('출석 인증코드를 입력하세요', '');
                     if (number === answer.join("")) {
                         alert("출석 인증 성공!");
+                        if (!periodsStatus[period].startTime) {
+                            periodsStatus[period].startTime = new Date();
+                        }
                     } else {
                         alert("출석 인증 실패!");
                     }
@@ -140,9 +149,25 @@
                     answer.push(numbers[index]);
                     numbers.splice(index, 1);
                 }
-                periodsStatus[period].attendanceCode = true; // 오타 수정
+                periodsStatus[period].attendanceCode = true;
                 alert(period + ' 인증 코드 생성됨: ' + answer.join(''));
             };
+
+            const endAttendance = (event) => {
+                const period = event.target.id.split("-")[0];
+                periodsStatus[period].endTime = new Date();
+                if (periodsStatus[period].startTime) {
+                    const startTime = periodsStatus[period].startTime;
+                    const endTime = periodsStatus[period].endTime;
+                    const totalTime = Math.floor((endTime - startTime) / 1000); // 총 출석 시간 (초 단위)
+                    alert(`${period} 총 출석 시간: ${totalTime}초`);
+                } else {
+                    alert(`${period} 출석 시작 시간이 기록되지 않았습니다.`);
+                }
+                periodsStatus[period].startTime = null;
+                periodsStatus[period].endTime = null;
+            };
+
         
             document.querySelectorAll(".attendance").forEach((button) => {
                 button.addEventListener("click", manageAttendance);
@@ -152,12 +177,16 @@
                 button.addEventListener("click", generateCode);
             });
 
+            document.querySelectorAll(".attendanceEnd").forEach((button) => {
+                button.addEventListener("click", endAttendance);
+            });
+
 
             const bluetoothButton = document.getElementById('bluetooth');
             const changeStatus = document.getElementById('bluetoothStatus');
 
             bluetoothButton.addEventListener('click', () => {
-                bluetoothStatus = !bluetoothStatus; // 상태를 반전시킴
+                bluetoothStatus = !bluetoothStatus;
 
                 if (bluetoothStatus) {
                     changeStatus.textContent = 'Bluetooth 상태: On';
@@ -166,7 +195,7 @@
                 }
             });
         </script>
-        
+         
 </body>
 
 </html>
